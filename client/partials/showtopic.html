@@ -1,0 +1,32 @@
+<div ng-if='!pleaseLogin'>
+  <div class='navbar'>
+    <ul>
+      <li><a href='#!/dashboard'>Dashboard</a></li>
+      <li>|</li>
+      <li><span class='fakelink' ng-click=logout()>Logout</span></li>
+    </ul>
+  </div>
+  <a href='#!/user/{{topic.creator._id}}' ng-bind='topic.creator.name'></a> has created a topic:
+  <h3 ng-bind='topic.name'></h3>
+  Description: <span ng-bind='topic.description'></span>
+  <h3>Post your answer here...</h3>
+  <form ng-submit='createPost()'>
+    <textarea ng-model='newPost.contents'></textarea>
+    <input type='submit' value='Post'>
+  </form>
+  <ul ng-repeat='post in topic.posts'>
+    <li><a href='#!/user/{{post._user._id}}' ng-bind='post._user.name'></a>: <span ng-bind='post.contents'></span> ({{post.upvote.length}} <span class='fakelink' ng-click=upvote(post)>upvotes</span>, {{post.downvote.length}} <span class='fakelink' ng-click=downvote(post)>downvotes</span>)
+      <ul ng-repeat='comment in post.comments'>
+        <li><a href='#!/user/{{comment._user._id}}' ng-bind='comment._user.name'></a>: <span ng-bind='comment.contents'></span></li>
+      </ul>
+      <form ng-submit='createComment(post)'>
+        <textarea ng-model='newComment[post._id].contents'></textarea>
+        <input type='submit' value='Comment'>
+      </form>
+    </li>
+  </ul>
+</div>
+
+<div ng-if='pleaseLogin'>
+  <p>Your login has expired, please <span class='fakelink' ng-click='logout()'>log in again.</span></p>
+</div>

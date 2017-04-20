@@ -1,0 +1,71 @@
+<div ng-if='!pleaseLogin'>
+  <div class='navbar'>
+    <h3 ng-bind='"Welcome, "+(user.name)'></h3>
+    <ul>
+      <li><a href='#!/dashboard'>Dashboard</a></li>
+      <li>|</li>
+      <li><span class='fakelink' ng-click=logout()>Logout</span></li>
+    </ul>
+  </div>
+  <form ng-submit='search=newSearch'>
+    <input type='text' ng-model='newSearch'>
+    <input type='submit' value='Search'>
+  </form>
+  <table class='data'>
+    <thead>
+      <th ng-click='order("category.name")'>
+        Category
+        <span ng-if='ordering=="category.name"'>&#x25b4;</span>
+        <span ng-if='ordering=="-category.name"'>&#x25be;</span>
+      </th>
+      <th ng-click='order("createdAt")'>
+        Topic
+        <span ng-if='ordering=="createdAt"'>&#x25b4;</span>
+        <span ng-if='ordering=="-createdAt"'>&#x25be;</span>
+      </th>
+      <th ng-click='order("creator.name")'>
+        User Name
+        <span ng-if='ordering=="creator.name"'>&#x25b4;</span>
+        <span ng-if='ordering=="-creator.name"'>&#x25be;</span>
+      </th>
+      <th ng-click='order("posts.length")'>
+        Posts
+        <span ng-if='ordering=="posts.length"'>&#x25b4;</span>
+        <span ng-if='ordering=="-posts.length"'>&#x25be;</span>
+      </th>
+    </thead>
+    <tbody>
+      <tr ng-repeat="topic in topics | filter:search | orderBy:ordering track by $index">
+        <td ng-bind="topic.category.name"></td>
+        <td><a href='#!/topic/{{topic._id}}' ng-bind="topic.name"></a></td>
+        <td><a href='#!/user/{{topic.creator._id}}' ng-bind="topic.creator.name"></a></td>
+        <td ng-bind="topic.posts.length"></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4>Add a new Topic</h4>
+  <form ng-submit='makeTopic(newTopic)'>
+    <table>
+      <tbody>
+        <tr>
+          <td>Topic:</td>
+          <td><input type='text' ng-model='newTopic.name'></td>
+        </tr>
+        <tr>
+          <td>Description:</td>
+          <td><textarea ng-model='newTopic.description'></textarea></td>
+        </tr>
+        <tr>
+          <td>Category:</td>
+          <td><select ng-model='newTopic.category' ng-options='category.name for category in categories'></select></td>
+        </tr>
+      </tbody>
+    </table>
+    <input type='submit'>
+  </form>
+</div>
+
+
+<div ng-if='pleaseLogin'>
+  <p>Your login has expired, please <span class='fakelink' ng-click='logout()'>log in again.</span></p>
+</div>
